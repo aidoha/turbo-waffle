@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import * as esbuild from "esbuild-wasm";
+import { unpkgPathPlugin } from "./plugins/unpkg-path-plugin";
 
 const App = () => {
   const ref = useRef<any>();
@@ -8,9 +9,9 @@ const App = () => {
   const [code, setCode] = useState("");
 
   const startService = async () => {
-    await esbuild.startService({
+    ref.current = await esbuild.startService({
       worker: true,
-      wasmURL: "/esbuild.wasm",
+      wasmURL: "https://unpkg.com/esbuild-wasm@0.8.27/esbuild.wasm",
     });
   };
 
@@ -22,12 +23,20 @@ const App = () => {
     if (!ref.current) {
       return;
     }
-    const result = await ref.current.transform(input, {
-      loader: "jsx",
-      target: "es2015",
+
+    const result = await ref.current.build({
+      entryPoints: ["index.js"],
+      bundle: true,
+      write: false,
+      plugins: [unpkgPathPlugin()],
     });
 
-    setCode(result);
+    // const result = await ref.current.transform(input, {
+    //   target: "es2015",
+    //   loader: "jsx",
+    // });
+
+    setCode(result.code);
   };
 
   return (
@@ -35,7 +44,8 @@ const App = () => {
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Put your code here"
+        rows={20}
+        cols={20}
       ></textarea>
       <div>
         <button onClick={onClick}>Submit</button>
@@ -45,4 +55,4 @@ const App = () => {
   );
 };
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.querySelector("#root"));
