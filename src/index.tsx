@@ -35,8 +35,9 @@ const App = () => {
     //   target: "es2015",
     //   loader: "jsx",
     // });
+    // setCode(result.code);
 
-    setCode(result.code);
+    setCode(result.outputFiles[0].text);
   };
 
   return (
