@@ -28,11 +28,11 @@ const App = () => {
       entryPoints: ["index.js"],
       bundle: true,
       write: false,
-      plugins: [unpkgPathPlugin()],
+      plugins: [unpkgPathPlugin(input)],
       define: {
-        'process.env.NODE_ENV': '"production"',
-        global: 'window'
-      }
+        "process.env.NODE_ENV": '"production"',
+        global: "window",
+      },
     });
 
     // const result = await ref.current.transform(input, {
