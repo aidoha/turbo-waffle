@@ -41,9 +41,9 @@ const App = () => {
     //   loader: "jsx",
     // });
     // setCode(result.code);
-
     setCode(result.outputFiles[0].text);
   };
+  const html = `<script>${code}</script>`;
 
   return (
     <div>
@@ -57,6 +57,7 @@ const App = () => {
         <button onClick={onClick}>Submit</button>
       </div>
       <pre>{code}</pre>
+      <iframe srcDoc={html} sandbox="allow-scripts" />
     </div>
   );
 };
